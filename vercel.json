@@ -1,0 +1,9 @@
+{
+	"version": 2,
+	"routes": [
+		{ "src": "/api/market-snapshot", "dest": "/api/market-snapshot.mjs" },
+		{ "src": "/\\.well-known/farcaster\\.json", "dest": "/api/farcaster-manifest.mjs" },
+		{ "handle": "filesystem" },
+		{ "src": "/(.*)", "dest": "/index.html" }
+	]
+}

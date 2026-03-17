@@ -327,7 +327,7 @@ function json(res, statusCode, payload) {
 	res.end(JSON.stringify(payload));
 }
 
-function buildManifest(url) {
+export function buildManifest(url) {
 	const baseUrl = process.env.BASE_URL || `${url.protocol}//${url.host}` || DEFAULT_BASE_URL;
 	return {
 		accountAssociation: {
