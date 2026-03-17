@@ -1,0 +1,21 @@
+{
+	"accountAssociation": {
+		"header": "TODO: STABLE_PULSE_BASE_HEADER",
+		"payload": "TODO: STABLE_PULSE_BASE_PAYLOAD",
+		"signature": "TODO: STABLE_PULSE_BASE_SIGNATURE"
+	},
+	"miniapp": {
+		"version": "1",
+		"name": "Stable Pulse",
+		"iconUrl": "https://stablepulse.example.com/assets/icon.svg",
+		"homeUrl": "https://stablepulse.example.com",
+		"imageUrl": "https://stablepulse.example.com/assets/og-card.svg",
+		"buttonTitle": "스테이블코인 모니터 열기",
+		"splashImageUrl": "https://stablepulse.example.com/assets/splash.svg",
+		"splashBackgroundColor": "#f3efe6",
+		"subtitle": "정보형·알림형 스테이블코인 대시보드",
+		"description": "스테이블코인 상태를 수치와 변동으로 알려주는 정보 서비스입니다.",
+		"language": "ko",
+		"category": "information_services"
+	}
+}

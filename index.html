@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Oh-My-Stablecoin-Alarm Mini App</title>
+		<meta
+			name="description"
+			content="스테이블코인 상태를 쉽게 보는 앱. 가격 변동과 국내외 가격 괴리, 뉴스 흐름을 한눈에 볼 수 있어요."
+		/>
+		<link rel="stylesheet" href="./styles.css" />
+	</head>
+	<body>
+		<div class="app-shell">
+			<header class="hero">
+				<div class="lang-toggle" id="lang-toggle">
+					<button type="button" class="lang-button active" data-lang="ko">한국어</button>
+					<button type="button" class="lang-button" data-lang="en">English</button>
+				</div>
+				<div class="hero-copy">
+					<p class="eyebrow" id="hero-kicker">Oh-My-Stablecoin-Alarm</p>
+					<h1 id="hero-title">Oh-My-Stablecoin-Alarm</h1>
+					<p class="lede" id="hero-lede">스테이블코인 상태를 가장 쉽게 보는 방법. 오늘 필요한 변화만 간단히 확인하세요.</p>
+				</div>
+				<div class="hero-actions">
+					<button id="miniapp-ready" class="primary">지금 상태 보기</button>
+					<button id="alert-focus" class="secondary">알림 고르기</button>
+				</div>
+				<p class="hero-note" id="hero-note">복잡한 차트보다 오늘 필요한 변화부터 먼저 보여줄게요.</p>
+			</header>
+
+			<nav class="tab-nav">
+				<button class="tab-button active" data-target="home-section" id="tab-home">홈</button>
+				<button class="tab-button" data-target="compare-section" id="tab-compare">비교</button>
+				<button class="tab-button" data-target="alerts-section" id="tab-alerts">알림</button>
+				<button class="tab-button" data-target="explain-section" id="tab-guide">안내</button>
+			</nav>
+
+			<main>
+				<section id="home-section" class="panel status-strip">
+					<div>
+						<p class="label" id="summary-status-label">오늘의 상태</p>
+						<p class="metric good">안정</p>
+					</div>
+					<div>
+						<p class="label" id="summary-variation-label">최근 24시간 변동</p>
+						<p class="metric">2건</p>
+					</div>
+					<div>
+						<p class="label" id="summary-premium-label">국내외 가격 괴리 감지</p>
+						<p class="metric">1개 자산</p>
+					</div>
+					<div>
+						<p class="label" id="summary-rule-label">활성 알림 규칙</p>
+						<p class="metric" id="active-rule-count">3개</p>
+					</div>
+				</section>
+
+				<section class="panel premium-panel">
+					<div class="section-header compact">
+						<div>
+							<p class="eyebrow" id="premium-kicker">가격 차이</p>
+							<h2 id="premium-title">국내외 가격 괴리</h2>
+						</div>
+						<p class="section-note" id="premium-note">국내 가격이 해외 기준과 얼마나 벌어졌는지 바로 볼 수 있어요.</p>
+					</div>
+					<div id="premium-card" class="premium-card"></div>
+				</section>
+
+				<section class="section-header">
+					<div>
+						<p class="eyebrow" id="coins-kicker">핵심 코인</p>
+						<h2 id="coins-title">지금 확인할 코인</h2>
+					</div>
+					<p class="section-note" id="coins-note">핵심 숫자만 빠르게 볼 수 있게 정리했어요.</p>
+				</section>
+				<section id="stablecards" class="stable-grid"></section>
+
+				<section id="compare-section" class="split-layout">
+					<div class="panel">
+						<div class="section-header compact">
+							<div>
+								<p class="eyebrow" id="compare-kicker">한눈 비교</p>
+								<h2 id="compare-title">스테이블코인 비교</h2>
+							</div>
+							<p class="section-note" id="compare-note">핵심 차이만 빠르게 볼 수 있어요.</p>
+						</div>
+						<div id="compare-table" class="compare-table"></div>
+					</div>
+
+					<div class="panel">
+						<div class="section-header compact">
+							<div>
+								<p class="eyebrow" id="level-kicker">읽는 법</p>
+								<h2 id="level-title">이렇게 보면 돼요</h2>
+							</div>
+						</div>
+						<ul class="scope-list" id="level-list">
+							<li><strong>안정</strong>이면 크게 움직이지 않은 상태예요.</li>
+							<li><strong>주의</strong>부터는 한 번 더 보면 좋아요.</li>
+							<li><strong>변동 확대</strong>는 평소보다 움직임이 큰 상태예요.</li>
+							<li><strong>변동 심화</strong>는 바로 체크해볼 만한 상태예요.</li>
+						</ul>
+					</div>
+				</section>
+
+				<section class="panel">
+					<div class="section-header compact">
+						<div>
+							<p class="eyebrow" id="history-kicker">가격 흐름</p>
+							<h2 id="history-title">가격 추이</h2>
+						</div>
+						<div class="chart-toolbar" id="history-range">
+							<button class="chart-range-button active" type="button" data-range="24h">24시간</button>
+							<button class="chart-range-button" type="button" data-range="7d">7일</button>
+						</div>
+					</div>
+					<div id="history-grid" class="history-grid"></div>
+				</section>
+
+				<section id="alerts-section" class="split-layout">
+					<div class="panel">
+						<div class="section-header compact">
+						<div>
+							<p class="eyebrow" id="alerts-kicker">알림</p>
+							<h2 id="alerts-title">알림 설정</h2>
+						</div>
+							<p class="section-note" id="alerts-note">필요한 코인만 골라두면 돼요.</p>
+					</div>
+						<div class="preset-row">
+							<button class="secondary preset-button" type="button" data-preset="usdt-premium">
+								USDT 괴리 0.5%
+							</button>
+							<button class="secondary preset-button" type="button" data-preset="usdc-variation">
+								USDC 변동 0.10%
+							</button>
+							<button class="secondary preset-button" type="button" data-preset="pyusd-watch">
+								PYUSD 변동 0.25%
+							</button>
+						</div>
+						<form id="alert-form" class="alert-form">
+							<label>
+								<span id="form-asset-label">자산</span>
+								<select name="asset" id="asset-select"></select>
+							</label>
+							<label>
+								<span id="form-type-label">조건</span>
+								<select name="type">
+									<option value="depeg">가격 변동 감지</option>
+									<option value="kimchi">국내외 가격 괴리</option>
+									<option value="reserve">준비금 보고 지연</option>
+									<option value="flow">대규모 유통량 변동</option>
+								</select>
+							</label>
+							<label>
+								<span id="form-level-label">민감도</span>
+								<select name="level" id="level-select">
+									<option value="tight">민감 (0.5%)</option>
+									<option value="normal" selected>보통 (1.0%)</option>
+									<option value="calm">완만 (2.0%)</option>
+								</select>
+							</label>
+							<label>
+								<span id="form-channel-label">알림 채널</span>
+								<select name="channel">
+									<option value="inapp">인앱 알림</option>
+									<option value="push">푸시 알림</option>
+									<option value="digest">요약 알림</option>
+								</select>
+							</label>
+							<button type="submit" class="primary wide" id="form-submit-button">알림 규칙 추가</button>
+						</form>
+						<ul id="rule-list" class="rule-list"></ul>
+					</div>
+
+					<div class="panel">
+						<div class="section-header compact">
+							<div>
+								<p class="eyebrow" id="signals-kicker">요약</p>
+								<h2 id="signals-title">바로 확인할 내용</h2>
+							</div>
+						</div>
+						<div id="signals" class="signal-list"></div>
+					</div>
+				</section>
+
+				<section class="panel">
+					<div class="section-header compact">
+						<div>
+							<p class="eyebrow" id="news-kicker">뉴스</p>
+							<h2 id="news-title">지금 보는 뉴스</h2>
+						</div>
+						<p class="section-note" id="news-note">국내와 해외 이슈를 나눠서 짧게 볼 수 있어요.</p>
+					</div>
+					<div class="news-tabs" id="news-tabs">
+						<button class="news-tab-button active" type="button" data-news-target="domestic" id="domestic-news-tab">국내 뉴스</button>
+						<button class="news-tab-button" type="button" data-news-target="global" id="global-news-tab">해외 뉴스</button>
+					</div>
+					<div class="news-panels">
+						<div class="news-group active" data-news-panel="domestic">
+							<div class="news-group-head">
+								<strong id="domestic-news-title">국내 뉴스</strong>
+								<span class="label" id="domestic-news-note">국내 기사 중심</span>
+							</div>
+							<div id="news-domestic" class="news-list"></div>
+						</div>
+						<div class="news-group" data-news-panel="global">
+							<div class="news-group-head">
+								<strong id="global-news-title">해외 뉴스</strong>
+								<span class="label" id="global-news-note">공신력 있는 출처 위주</span>
+							</div>
+							<div id="news-global" class="news-list"></div>
+						</div>
+					</div>
+				</section>
+
+				<section id="explain-section">
+					<div class="panel">
+						<div class="section-header compact">
+							<div>
+								<p class="eyebrow" id="guide-kicker">안내</p>
+								<h2 id="guide-title">알아두면 좋아요</h2>
+							</div>
+						</div>
+						<div class="notice-board">
+							<p class="notice-lede" id="notice-lede">처음 들어오면 지금 상태, 가격 차이, 뉴스만 먼저 보면 충분해요.</p>
+							<details class="notice-item" open>
+								<summary id="guide-summary">이 서비스가 보여주는 것</summary>
+								<div class="guide-copy">
+									<p id="guide-line-1">복잡한 화면 대신, 오늘 꼭 봐야 할 상태부터 먼저 보여줄게요.</p>
+									<p id="guide-line-2">가격 변동, 국내외 가격 괴리, 주요 뉴스를 한눈에 보고 필요할 때만 알림을 켜면 돼요.</p>
+									<p id="guide-line-3">어려운 말은 최대한 줄이고, 참고할 만한 정보만 담았어요.</p>
+								</div>
+							</details>
+							<details class="notice-item">
+								<summary id="notice-summary">이용 전에 알아둘 점</summary>
+								<ul class="scope-list" id="notice-list">
+									<li>투자 자문이나 매매 기능은 없어요.</li>
+									<li>표시된 정보는 참고용으로만 봐주세요.</li>
+									<li>데이터는 조금 늦거나 다를 수 있어요.</li>
+									<li>매수, 매도, 송금 같은 기능은 넣지 않았어요.</li>
+								</ul>
+							</details>
+						</div>
+					</div>
+				</section>
+
+				<section class="panel footer-panel">
+					<div class="footer-meta">
+						<div>
+							<p class="label" id="footer-price-label">가격 출처</p>
+							<p class="meta-value">CoinGecko API 시연 매핑</p>
+						</div>
+						<div>
+							<p class="label" id="footer-onchain-label">온체인 출처</p>
+							<p class="meta-value">Upbit 시세 · Frankfurter 환율 · 발행사 보고서</p>
+						</div>
+						<div>
+							<p class="label" id="footer-updated-label">업데이트</p>
+							<p class="meta-value" id="updated-at"></p>
+						</div>
+					</div>
+				</section>
+			</main>
+		</div>
+
+		<script type="module" src="./app.js"></script>
+	</body>
+</html>
