@@ -273,31 +273,6 @@ button:hover {
 	color: var(--warn);
 }
 
-.tab-nav {
-	position: sticky;
-	top: 0;
-	z-index: 10;
-	display: flex;
-	gap: 8px;
-	margin: 12px 0 14px;
-	padding: 8px;
-	border-radius: 999px;
-	background: rgba(255, 255, 255, 0.88);
-	backdrop-filter: blur(14px);
-	border: 1px solid var(--line);
-}
-
-.tab-button {
-	background: transparent;
-	color: var(--muted);
-	border: 1px solid transparent;
-}
-
-.tab-button.active {
-	background: var(--ink);
-	color: #fff;
-}
-
 .panel,
 .status-strip > div {
 	border-radius: var(--radius);
@@ -930,10 +905,6 @@ button:hover {
 	.section-header {
 		align-items: start;
 		flex-direction: column;
-	}
-
-	.tab-nav {
-		overflow-x: auto;
 	}
 
 	.card-meta,

@@ -14,7 +14,6 @@ const translations = {
 		primaryButton: "지금 상태 보기",
 		secondaryButton: "알림 고르기",
 		primaryButtonReady: "상태 연결 완료",
-		tabs: ["홈", "비교", "알림", "안내"],
 		summaryStatusLabel: "오늘의 상태",
 		summaryVariationLabel: "최근 24시간 변동",
 		summaryPremiumLabel: "국내외 가격 괴리 감지",
@@ -145,7 +144,6 @@ const translations = {
 		primaryButton: "See Market Now",
 		secondaryButton: "Pick Alerts",
 		primaryButtonReady: "Ready in App",
-		tabs: ["Home", "Compare", "Alerts", "Guide"],
 		summaryStatusLabel: "Overall status",
 		summaryVariationLabel: "24H moves",
 		summaryPremiumLabel: "Domestic gaps",
@@ -328,10 +326,6 @@ function renderStaticText() {
 	setText("#hero-note", t("heroNote"));
 	setText("#miniapp-ready", state.bridgeReady ? t("primaryButtonReady") : t("primaryButton"));
 	setText("#alert-focus", t("secondaryButton"));
-	setText("#tab-home", t("tabs")[0]);
-	setText("#tab-compare", t("tabs")[1]);
-	setText("#tab-alerts", t("tabs")[2]);
-	setText("#tab-guide", t("tabs")[3]);
 	setText("#summary-status-label", t("summaryStatusLabel"));
 	setText("#summary-variation-label", t("summaryVariationLabel"));
 	setText("#summary-premium-label", t("summaryPremiumLabel"));
@@ -796,17 +790,6 @@ function bindForm() {
 	});
 }
 
-function bindTabs() {
-	document.querySelectorAll(".tab-button").forEach((button) => {
-		button.addEventListener("click", () => {
-			document.querySelectorAll(".tab-button").forEach((item) => item.classList.remove("active"));
-			button.classList.add("active");
-			const targetId = button.dataset.target;
-			document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "start" });
-		});
-	});
-}
-
 function bindHistoryRange() {
 	document.querySelectorAll("#history-range [data-range]").forEach((button) => {
 		button.addEventListener("click", () => {
@@ -1215,7 +1198,6 @@ renderRules();
 renderSignals();
 renderNews();
 bindForm();
-bindTabs();
 bindHistoryRange();
 bindStableCardNav();
 bindNewsTabs();
