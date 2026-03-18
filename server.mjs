@@ -41,6 +41,30 @@ const COIN_CONFIG = [
 		upbitMarket: null,
 		backing: "법정화폐 기반",
 		reference: "PayPal · Paxos 준비금 보고서"
+	},
+	{
+		id: "dai",
+		symbol: "DAI",
+		name: "Dai",
+		upbitMarket: null,
+		backing: "암호자산 담보 기반",
+		reference: "MakerDAO 담보 현황"
+	},
+	{
+		id: "first-digital-usd",
+		symbol: "FDUSD",
+		name: "First Digital USD",
+		upbitMarket: null,
+		backing: "법정화폐 기반",
+		reference: "First Digital 준비금 보고서"
+	},
+	{
+		id: "true-usd",
+		symbol: "TUSD",
+		name: "TrueUSD",
+		upbitMarket: null,
+		backing: "법정화폐 기반",
+		reference: "TrueUSD 준비금 보고서"
 	}
 ];
 
@@ -88,7 +112,7 @@ export async function buildSnapshot(lang = "ko") {
 
 	const [marketRes, tickerRes, fxRes, domesticNewsRes, globalNewsRes] = await Promise.all([
 		fetch(
-			`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coinIds}&order=market_cap_desc&per_page=3&page=1&sparkline=true&price_change_percentage=24h`
+			`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coinIds}&order=market_cap_desc&per_page=${COIN_CONFIG.length}&page=1&sparkline=true&price_change_percentage=24h`
 		),
 		fetch(`https://api.upbit.com/v1/ticker?markets=${upbitMarkets}`),
 		fetch("https://api.frankfurter.app/latest?from=USD&to=KRW"),

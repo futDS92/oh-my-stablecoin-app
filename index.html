@@ -74,34 +74,18 @@
 					</div>
 					<p class="section-note" id="coins-note">핵심 숫자만 빠르게 볼 수 있게 정리했어요.</p>
 				</section>
-				<section id="stablecards" class="stable-grid"></section>
-
-				<section id="compare-section" class="split-layout">
-					<div class="panel">
-						<div class="section-header compact">
-							<div>
-								<p class="eyebrow" id="compare-kicker"></p>
-								<h2 id="compare-title">스테이블코인 비교</h2>
-							</div>
-							<p class="section-note" id="compare-note">핵심 차이만 빠르게 볼 수 있어요.</p>
-						</div>
-						<div id="compare-table" class="compare-table"></div>
+				<section id="top3-board" class="top3-grid"></section>
+				<section class="coin-slider-shell">
+					<div class="coin-slider-toolbar">
+						<button id="stable-prev" class="secondary slider-arrow" type="button" aria-label="previous">
+							‹
+						</button>
+						<div id="stable-position" class="slider-position">1 / 1</div>
+						<button id="stable-next" class="secondary slider-arrow" type="button" aria-label="next">
+							›
+						</button>
 					</div>
-
-					<div class="panel">
-						<div class="section-header compact">
-							<div>
-								<p class="eyebrow" id="level-kicker"></p>
-								<h2 id="level-title">이렇게 보면 돼요</h2>
-							</div>
-						</div>
-						<ul class="scope-list" id="level-list">
-							<li><strong>안정</strong>이면 크게 움직이지 않은 상태예요.</li>
-							<li><strong>주의</strong>부터는 한 번 더 보면 좋아요.</li>
-							<li><strong>변동 확대</strong>는 평소보다 움직임이 큰 상태예요.</li>
-							<li><strong>변동 심화</strong>는 바로 체크해볼 만한 상태예요.</li>
-						</ul>
-					</div>
+					<section id="stablecards" class="stable-grid"></section>
 				</section>
 
 				<section class="panel">
@@ -219,7 +203,7 @@
 						<div class="section-header compact">
 							<div>
 								<p class="eyebrow" id="guide-kicker"></p>
-								<h2 id="guide-title">알아두면 좋아요</h2>
+								<h2 id="guide-title">공지사항</h2>
 							</div>
 						</div>
 						<div class="notice-board">
@@ -231,6 +215,20 @@
 									<p id="guide-line-2">가격 변동, 국내외 가격 괴리, 주요 뉴스를 한눈에 보고 필요할 때만 알림을 켜면 돼요.</p>
 									<p id="guide-line-3">어려운 말은 최대한 줄이고, 참고할 만한 정보만 담았어요.</p>
 								</div>
+							</details>
+							<details class="notice-item">
+								<summary id="compare-summary">스테이블코인 비교</summary>
+								<div class="notice-compare-copy" id="compare-note">핵심 차이만 빠르게 볼 수 있어요.</div>
+								<div id="compare-table" class="compare-table"></div>
+							</details>
+							<details class="notice-item">
+								<summary id="level-summary">이렇게 보면 돼요</summary>
+								<ul class="scope-list" id="level-list">
+									<li><strong>안정</strong>이면 크게 움직이지 않은 상태예요.</li>
+									<li><strong>주의</strong>부터는 한 번 더 보면 좋아요.</li>
+									<li><strong>변동 확대</strong>는 평소보다 움직임이 큰 상태예요.</li>
+									<li><strong>변동 심화</strong>는 바로 체크해볼 만한 상태예요.</li>
+								</ul>
 							</details>
 							<details class="notice-item">
 								<summary id="notice-summary">이용 전에 알아둘 점</summary>

@@ -27,9 +27,11 @@ const translations = {
 		coinsNote: "핵심 숫자만 빠르게 볼 수 있게 정리했어요.",
 		compareKicker: "",
 		compareTitle: "스테이블코인 비교",
+		compareSummary: "스테이블코인 비교",
 		compareNote: "핵심 차이만 빠르게 볼 수 있어요.",
 		levelKicker: "",
 		levelTitle: "이렇게 보면 돼요",
+		levelSummary: "이렇게 보면 돼요",
 		levelItems: [
 			"<strong>안정</strong>이면 크게 움직이지 않은 상태예요.",
 			"<strong>주의</strong>부터는 한 번 더 보면 좋아요.",
@@ -65,7 +67,7 @@ const translations = {
 		globalNewsTitle: "해외 뉴스",
 		globalNewsNote: "공신력 있는 출처 위주",
 		guideKicker: "",
-		guideTitle: "알아두면 좋아요",
+		guideTitle: "공지사항",
 		noticeLede: "처음 들어오면 지금 상태, 가격 차이, 뉴스만 먼저 보면 충분해요.",
 		guideSummary: "이 서비스가 보여주는 것",
 		guideLines: [
@@ -156,9 +158,11 @@ const translations = {
 		coinsNote: "Only the numbers you need, laid out simply.",
 		compareKicker: "",
 		compareTitle: "Stablecoin Comparison",
+		compareSummary: "Stablecoin Comparison",
 		compareNote: "Check the key differences at a glance.",
 		levelKicker: "",
 		levelTitle: "Quick guide",
+		levelSummary: "How to read",
 		levelItems: [
 			"<strong>Stable</strong> means movement is still small.",
 			"<strong>Watch</strong> means it is worth checking once more.",
@@ -194,7 +198,7 @@ const translations = {
 		globalNewsTitle: "Global News",
 		globalNewsNote: "Trusted sources first",
 		guideKicker: "",
-		guideTitle: "Good to know",
+		guideTitle: "Notice Board",
 		noticeLede: "Start with current status, price gaps, and news. That is enough for a quick check.",
 		guideSummary: "What this app shows",
 		guideLines: [
@@ -270,7 +274,8 @@ const state = {
 	snapshot: null,
 	historyRange: "24h",
 	lang: loadLanguage(),
-	bridgeReady: false
+	bridgeReady: false,
+	stableCardIndex: 0
 };
 
 function loadRules() {
@@ -280,7 +285,7 @@ function loadRules() {
 		const parsed = JSON.parse(raw);
 		return parsed.map((rule) => ({
 			...rule,
-			asset: rule.asset === "DAI" ? "PYUSD" : rule.asset,
+			asset: rule.asset,
 			type: normalizeType(rule.type),
 			level: normalizeLevel(rule.level),
 			channel: normalizeChannel(rule.channel)
@@ -339,9 +344,11 @@ function renderStaticText() {
 	setText("#coins-note", t("coinsNote"));
 	setText("#compare-kicker", t("compareKicker"));
 	setText("#compare-title", t("compareTitle"));
+	setText("#compare-summary", t("compareSummary"));
 	setText("#compare-note", t("compareNote"));
 	setText("#level-kicker", t("levelKicker"));
 	setText("#level-title", t("levelTitle"));
+	setText("#level-summary", t("levelSummary"));
 	setHtml("#level-list", t("levelItems").map((item) => `<li>${item}</li>`).join(""));
 	setText("#history-kicker", t("historyKicker"));
 	setText("#history-title", t("historyTitle"));
@@ -408,63 +415,103 @@ function updatePresetLabels() {
 	});
 }
 
-function renderStablecards() {
-	const container = document.querySelector("#stablecards");
+function renderTop3Board() {
+	const container = document.querySelector("#top3-board");
+	if (!container) return;
 	if (!state.snapshot) {
-		container.innerHTML = `<article class="stable-card"><div class="label">${t("loadingData")}</div></article>`;
+		container.innerHTML = "";
 		return;
 	}
 
-	container.innerHTML = state.snapshot.stablecoins
-		.map((coin) => {
+	const top3 = [...state.snapshot.stablecoins]
+		.sort((a, b) => b.marketCapUsd - a.marketCapUsd)
+		.slice(0, 3);
+
+	container.innerHTML = top3
+		.map((coin, index) => {
 			const chip = statusMeta(coin.status);
-			const premiumText =
-				coin.premiumPct === null
-					? t("noDomesticMarket")
-					: `${formatSignedPercent(coin.premiumPct)} · ${t("domesticPrice")} ${formatKrw(coin.domesticKrwPrice)}`;
 			return `
-				<article class="stable-card">
-					<div class="stable-head">
-						<div class="stable-head-copy">
-							<div class="stable-name">${coin.symbol}</div>
-							<div class="label">${coin.name}</div>
-						</div>
+				<article class="top3-card">
+					<div class="top3-rank">TOP ${index + 1}</div>
+					<div class="top3-head">
+						<strong>${coin.symbol}</strong>
 						<span class="chip ${chip.className}">${chip.label}</span>
 					</div>
-					<div class="data-grid">
-						<div class="datum">
-							<span class="label">${t("currentPrice")}</span>
-							<strong>${formatUsd(coin.priceUsd)}</strong>
-						</div>
-						<div class="datum">
-							<span class="label">${t("priceChange")}</span>
-							<strong>${formatSignedPercent(coin.variationPct)}</strong>
-						</div>
-						<div class="datum datum-wide">
-							<span class="label">${t("premium")}</span>
-							<strong>${premiumText}</strong>
-						</div>
-						<div class="datum">
-							<span class="label">${t("marketCap")}</span>
-							<strong>${formatUsdCompact(coin.marketCapUsd)}</strong>
-						</div>
-						<div class="datum">
-							<span class="label">${t("supply")}</span>
-							<strong>${formatSupply(coin.circulatingSupply)}</strong>
-						</div>
-						<div class="datum datum-wide">
-							<span class="label">${t("referenceInfo")}</span>
-							<strong>${coin.backing} · ${coin.reference}</strong>
-						</div>
-					</div>
-					<div class="card-meta">
-						<span>${coin.source}</span>
-						<span>${formatTimestamp(coin.updatedAt)}</span>
-					</div>
+					<div class="top3-price">${formatUsd(coin.priceUsd)}</div>
+					<div class="label">${t("marketCap")} ${formatUsdCompact(coin.marketCapUsd)}</div>
 				</article>
 			`;
 		})
 		.join("");
+}
+
+function renderStablecards() {
+	const container = document.querySelector("#stablecards");
+	const position = document.querySelector("#stable-position");
+	const prevButton = document.querySelector("#stable-prev");
+	const nextButton = document.querySelector("#stable-next");
+	if (!state.snapshot) {
+		container.innerHTML = `<article class="stable-card"><div class="label">${t("loadingData")}</div></article>`;
+		if (position) position.textContent = "1 / 1";
+		if (prevButton) prevButton.disabled = true;
+		if (nextButton) nextButton.disabled = true;
+		return;
+	}
+
+	const coins = state.snapshot.stablecoins;
+	state.stableCardIndex = Math.max(0, Math.min(state.stableCardIndex, coins.length - 1));
+	const coin = coins[state.stableCardIndex];
+	const chip = statusMeta(coin.status);
+	const premiumText =
+		coin.premiumPct === null
+			? t("noDomesticMarket")
+			: `${formatSignedPercent(coin.premiumPct)} · ${t("domesticPrice")} ${formatKrw(coin.domesticKrwPrice)}`;
+
+	container.innerHTML = `
+		<article class="stable-card">
+			<div class="stable-head">
+				<div class="stable-head-copy">
+					<div class="stable-name">${coin.symbol}</div>
+					<div class="label">${coin.name}</div>
+				</div>
+				<span class="chip ${chip.className}">${chip.label}</span>
+			</div>
+			<div class="data-grid">
+				<div class="datum">
+					<span class="label">${t("currentPrice")}</span>
+					<strong>${formatUsd(coin.priceUsd)}</strong>
+				</div>
+				<div class="datum">
+					<span class="label">${t("priceChange")}</span>
+					<strong>${formatSignedPercent(coin.variationPct)}</strong>
+				</div>
+				<div class="datum datum-wide">
+					<span class="label">${t("premium")}</span>
+					<strong>${premiumText}</strong>
+				</div>
+				<div class="datum">
+					<span class="label">${t("marketCap")}</span>
+					<strong>${formatUsdCompact(coin.marketCapUsd)}</strong>
+				</div>
+				<div class="datum">
+					<span class="label">${t("supply")}</span>
+					<strong>${formatSupply(coin.circulatingSupply)}</strong>
+				</div>
+				<div class="datum datum-wide">
+					<span class="label">${t("referenceInfo")}</span>
+					<strong>${coin.backing} · ${coin.reference}</strong>
+				</div>
+			</div>
+			<div class="card-meta">
+				<span>${coin.source}</span>
+				<span>${formatTimestamp(coin.updatedAt)}</span>
+			</div>
+		</article>
+	`;
+
+	if (position) position.textContent = `${state.stableCardIndex + 1} / ${coins.length}`;
+	if (prevButton) prevButton.disabled = state.stableCardIndex === 0;
+	if (nextButton) nextButton.disabled = state.stableCardIndex === coins.length - 1;
 }
 
 function renderHistoryGrid() {
@@ -771,6 +818,20 @@ function bindHistoryRange() {
 	});
 }
 
+function bindStableCardNav() {
+	document.querySelector("#stable-prev")?.addEventListener("click", () => {
+		if (!state.snapshot) return;
+		state.stableCardIndex = Math.max(0, state.stableCardIndex - 1);
+		renderStablecards();
+	});
+
+	document.querySelector("#stable-next")?.addEventListener("click", () => {
+		if (!state.snapshot) return;
+		state.stableCardIndex = Math.min(state.snapshot.stablecoins.length - 1, state.stableCardIndex + 1);
+		renderStablecards();
+	});
+}
+
 function bindNewsTabs() {
 	document.querySelectorAll("[data-news-target]").forEach((button) => {
 		button.addEventListener("click", () => {
@@ -809,6 +870,7 @@ async function loadSnapshot() {
 		const response = await fetch(`/api/market-snapshot?lang=${state.lang}`);
 		if (!response.ok) throw new Error("snapshot failed");
 		state.snapshot = await response.json();
+		renderTop3Board();
 		renderStablecards();
 		renderPremiumCard();
 		renderHistoryGrid();
@@ -1143,6 +1205,7 @@ async function setupMiniappBridge() {
 }
 
 renderStaticText();
+renderTop3Board();
 renderStablecards();
 renderPremiumCard();
 renderHistoryGrid();
@@ -1154,6 +1217,7 @@ renderNews();
 bindForm();
 bindTabs();
 bindHistoryRange();
+bindStableCardNav();
 bindNewsTabs();
 bindLanguageToggle();
 setupMiniappBridge();
